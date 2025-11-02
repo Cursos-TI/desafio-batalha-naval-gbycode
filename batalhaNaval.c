@@ -14,6 +14,18 @@ int main() {
     int linhaD1, colunaD1;
     int linhaD2, colunaD2;
 
+
+    //Pontos de origem das habilidades
+    int origemConelinha = 0, origemConeColuna = 2;
+    int origemCruzLinha = 5, origemCruzColuna = 2;
+    int origemOctaedroLinha = 3, origemOctaedroColuna = 7;
+
+    int tamanhoHabiliadade = 5;
+
+    int cone[5][5] = {0};
+    int cruz[5][5] = {0};
+    int octaedro[5][5] = {0};
+
     //Inicialização das variáveis
     linhaH = 1; //Linha inicial do navio horizontal
     linhaV = 5; //Linha inicial do navio vertical
@@ -25,8 +37,8 @@ int main() {
     colunaD2 = 5; //coluna inicial do navio diagonal
 
     //Inicialização do tabuleiro
-    for (int i = 0; i < 10; i++) {
-        for (int j = 0; j < 10; j++){
+    for (i = 0; i < 10; i++) {
+        for (j = 0; j < 10; j++){
             tabuleiro[i][j] = 0; //Todas as posições começam com água
         }
     }
@@ -43,35 +55,98 @@ int main() {
 
     //Navio horizontal
     for(i = 0; i < 3; i++){
-        if (colunaH + i < 10){
+        if (colunaH + i < 10)
             tabuleiro[linhaH][colunaH + i] = navioHorizontal[i];
         }
-    }
+    
     
     //Navio Vertical
     for (i = 0; i < 3; i++) {
-        if (linhaV + i < 10){
+        if (linhaV + i < 10)
                 tabuleiro[linhaV + i][colunaV] = navioVertical[i];
         }
-    }
+    
 
     //Navio Diagonal Princiapal
     for (i = 0; i < 3; i++){
-        if (linhaD1 + i < 10 && colunaD1 + i < 10){
+        if (linhaD1 + i < 10 && colunaD1 + i < 10)
             tabuleiro[linhaD1 + i][colunaD1 + i] = navioDiagonal1[i];
         }
-    }
+    
     
     //Navio Diagonal Secundária
     for (i = 0; i < 3; i++){
-        if (linhaD2 + i < 10 && colunaD2 - i >= 0){
+        if (linhaD2 + i < 10 && colunaD2 - i >= 0)
             tabuleiro[linhaD2 + i][colunaD2 - i] = navioDiagonal2[i];
+        }
+    
+
+    //Habilidades
+    //Cone
+    for (i = 0; i< tamanhoHabiliadade; i++){
+        for (j = 0; j < tamanhoHabiliadade; j++)
+            if (j >= 2 - i && j <= 2 + i)
+                cone[i][j] = 1;
+        }
+    
+
+    //Cruz
+    for (i = 0; i < tamanhoHabiliadade; i++){
+        for (j = 0; j < tamanhoHabiliadade; j++)
+            if (i == 2 || j == 2)
+                cruz[i][j] =1;
+        }
+    
+
+    //Octaedro
+    for (i = 0; i< tamanhoHabiliadade; i++){
+        for (j = 0; j < tamanhoHabiliadade; j++)
+            if ((i <= 2 && j >= 2 - i && j <= 2 + i) ||
+                (i > 2 && j >= i - 2 && j <= 6 - i))
+                octaedro[i][j] = 1;
+        }
+    
+
+    //Sobreposição das habilidades no tabuleiro
+    //Cone
+    for (i = 0; i< tamanhoHabiliadade; i++){
+        for (j = 0; j < tamanhoHabiliadade; j++){
+            int linhaTab = origemConelinha + i;
+            int colTab = origemConeColuna - 2 + j;
+            if (linhaTab >= 0 && linhaTab < 10 && colTab >= 0 && colTab < 10){
+                if (cone[i][j] == 1 && tabuleiro[linhaTab][colTab] == 0)
+                        tabuleiro[linhaTab][colTab] = 5;
+
+            }
+        }
+    }
+    
+    //Cruz
+    for (i = 0; i < tamanhoHabiliadade; i++){
+        for (j = 0; j < tamanhoHabiliadade; j++){
+                int linhaTab = origemCruzLinha - 2 + i;
+                int colTab = origemCruzColuna - 2 + j;
+                if(linhaTab >= 0 && linhaTab < 10 && colTab >= 0 && colTab < 10){
+                        if (cruz[i][j] == 1 && tabuleiro[linhaTab][colTab] == 0)
+                            tabuleiro[linhaTab][colTab] = 5;
+                }
         }
     }
 
+    //Octaedro
+    for (i = 0; i< tamanhoHabiliadade; i++){
+        for (j = 0; j < tamanhoHabiliadade; j++){
+            int linhaTab = origemOctaedroLinha - 2 + i;
+            int colTab = origemOctaedroColuna - 2 + j;
+            if (linhaTab >= 0 && linhaTab < 10 && colTab >= 0 && colTab < 10){
+                if (octaedro[i][j] == 1 && tabuleiro[linhaTab][colTab] == 0)
+                    tabuleiro[linhaTab][colTab] = 5;
+            }
+        }
+    }
 
     //Exibição do tabuleiro
-    printf("TABULEIRO BATALHA NAVAL AVENTUREIRO\n\n");
+    printf("TABULEIRO BATALHA NAVAL MESTRE\n\n");
 
     for (i = 0; i < 10; i++) {
         for (j = 0; j < 10; j++){
